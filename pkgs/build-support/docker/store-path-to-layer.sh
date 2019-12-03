@@ -28,3 +28,5 @@ echo "exit code: $?"
 
 # Indicate to docker that we're using schema version 1.0.
 echo -n "1.0" > $layerPath/VERSION
+
+echo "exit code: $?"

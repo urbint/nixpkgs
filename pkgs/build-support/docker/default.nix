@@ -311,6 +311,8 @@ rec {
       enableParallelBuilding = true;
     }
     ''
+      set -x
+
       # Delete impurities for store path layers, so they don't get
       # shared and taint other projects.
       cat ${configJson} \
@@ -324,13 +326,16 @@ rec {
       # code behaves properly when the number of layers equals:
       #      maxLayers-1, maxLayers, and maxLayers+1
       head -n $((maxLayers - 1)) $paths | cat -n | xargs -P$NIX_BUILD_CORES -n2 ${storePathToLayer}
+      echo "exitCode: $?"
       if [ $(cat $paths | wc -l) -ge $maxLayers ]; then
         tail -n+$maxLayers $paths | xargs ${storePathToLayer} $maxLayers
+        echo "exitCode: $?"
       fi
 
       echo "Finished building layer '$name'"
 
       mv ./layers $out
+      echo "exitCode: $?"
     '';
 
   # Create a "Customisation" layer which adds symlinks at the root of
