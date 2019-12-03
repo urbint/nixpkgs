@@ -325,10 +325,10 @@ rec {
       # following head and tail call lines, double-check that your
       # code behaves properly when the number of layers equals:
       #      maxLayers-1, maxLayers, and maxLayers+1
-      head -n $((maxLayers - 1)) $paths | cat -n | xargs -P$NIX_BUILD_CORES -n2 ${storePathToLayer}
+      head -n $((maxLayers - 1)) $paths | cat -n | xargs --verbose -P$NIX_BUILD_CORES -n2 ${storePathToLayer}
       echo "exitCode: $?"
       if [ $(cat $paths | wc -l) -ge $maxLayers ]; then
-        tail -n+$maxLayers $paths | xargs ${storePathToLayer} $maxLayers
+        tail -n+$maxLayers $paths | xargs --verbose ${storePathToLayer} $maxLayers
         echo "exitCode: $?"
       fi
 
